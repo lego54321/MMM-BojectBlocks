@@ -6,6 +6,7 @@
  */
 
 var NodeHelper = require("node_helper");
+var WebSocket = require("ws");
 
 module.exports = NodeHelper.create({
 
@@ -18,30 +19,35 @@ module.exports = NodeHelper.create({
 	 * argument payload mixed - The payload of the notification.
 	 */
 	socketNotificationReceived: function(notification, payload) {
-		if (notification === "{{MODULE_NAME}}-NOTIFICATION_TEST") {
-			console.log("Working notification system. Notification:", notification, "payload: ", payload);
-			// Send notification
-			this.sendNotificationTest(this.anotherFunction()); //Is possible send objects :)
+		if (notification === "INIT_OB") {
+			console.log("MMM ObjectBlocks Notification:",
+notification, "payload: ", payload);
+			let websocket_URL = payload;
+
+                        let ws = new WebSocket(websocket_URL);
+
+                        //onopen: called when connected
+			ws.onopen = function() {
+				console.log("websocket connect");
+			};
+
+			let self = this;
+
+			//onmessage: called when message arrives
+			ws.onmessage = function(event){
+				let message = event.data; // actual data
+				let data = JSON.parse(message); // convent string JSON
+				console.log("data: " + data.value);
+				self.sendSocketNotification("DATA_RECV",data.value);
+			};
+
+			//Oonclose: called when disconnected
+			ws.onclose = function( ) {
+				console.log("websocket disconnected");
+			};
+
+
 		}
 	},
 
-	// Example function send notification test
-	sendNotificationTest: function(payload) {
-		this.sendSocketNotification("{{MODULE_NAME}}-NOTIFICATION_TEST", payload);
-	},
-
-	// this you can create extra routes for your module
-	extraRoutes: function() {
-		var self = this;
-		this.expressApp.get("/{{MODULE_NAME}}/extra_route", function(req, res) {
-			// call another function
-			values = self.anotherFunction();
-			res.send(values);
-		});
-	},
-
-	// Test another function
-	anotherFunction: function() {
-		return {date: new Date()};
-	}
 });

@@ -1,13 +1,13 @@
 /* global Module */
 
 /* Magic Mirror
- * Module: {{MODULE_NAME}}
+ * Module: MMM-ObjectBlocks
  *
  * By {{AUTHOR_NAME}}
  * {{LICENSE}} Licensed.
  */
 
-Module.register("{{MODULE_NAME}}", {
+Module.register("MMM-ObjectBlocks", {
 	defaults: {
 		updateInterval: 60000,
 		retryDelay: 5000
@@ -28,9 +28,7 @@ Module.register("{{MODULE_NAME}}", {
 		setInterval(function() {
 			self.updateDom();
 		}, this.config.updateInterval);
-	},
-
-	/*
+	},	/*
 	 * getData
 	 * function example return data and show it in the module wrapper
 	 * get a URL request
@@ -122,7 +120,7 @@ Module.register("{{MODULE_NAME}}", {
 
 	getStyles: function () {
 		return [
-			"{{MODULE_NAME}}.css",
+			"MMM-ObjectBlocks.css",
 		];
 	},
 
@@ -143,12 +141,12 @@ Module.register("{{MODULE_NAME}}", {
 
 		// the data if load
 		// send notification to helper
-		this.sendSocketNotification("{{MODULE_NAME}}-NOTIFICATION_TEST", data);
+		this.sendSocketNotification("MMM-ObjectBlocks-NOTIFICATION_TEST", data);
 	},
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
-		if(notification === "{{MODULE_NAME}}-NOTIFICATION_TEST") {
+		if(notification === "MMM-ObjectBlocks-NOTIFICATION_TEST") {
 			// set dataNotification
 			this.dataNotification = payload;
 			this.updateDom();
